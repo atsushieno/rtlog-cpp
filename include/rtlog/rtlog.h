@@ -10,7 +10,7 @@
 #include <fmt/format.h>
 #endif // RTLOG_USE_FMTLIB
 
-#include <readerwriterqueue.h>
+#include <concurrentqueue.h>
 
 #ifndef STB_SPRINTF_IMPLEMENTATION
 #define STB_SPRINTF_IMPLEMENTATION
@@ -225,7 +225,7 @@ private:
         std::array<char, MaxMessageLength> mMessage{};
     };
 
-    moodycamel::ReaderWriterQueue<InternalLogData> mQueue{ MaxNumMessages };
+    moodycamel::ConcurrentQueue<InternalLogData> mQueue{ MaxNumMessages };
 };
 
 

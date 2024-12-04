@@ -27,13 +27,13 @@ target_include_directories(${PROJECT_NAME} INTERFACE
 )
 
 # Try to find the package ReaderWriterQueue, if not found fetch with FetchContent
-find_package(ReaderWriterQueue QUIET)
-if(NOT TARGET readerwriterqueue)
+find_package(ConcurrentQueue QUIET)
+if(NOT TARGET concurrentqueue)
     include(FetchContent)
-    FetchContent_Declare(ReaderWriterQueue
-        GIT_REPOSITORY https://github.com/cameron314/readerwriterqueue
+    FetchContent_Declare(ConcurrentQueue
+        GIT_REPOSITORY https://github.com/cameron314/concurrentqueue
     )
-    FetchContent_MakeAvailable(ReaderWriterQueue)
+    FetchContent_MakeAvailable(ConcurrentQueue)
 endif()
 
 if(NOT TARGET stb::stb)
@@ -71,7 +71,7 @@ endif()
 
 target_link_libraries(rtlog 
     INTERFACE 
-        readerwriterqueue
+        concurrentqueue
         stb::stb
         $<$<BOOL:${RTLOG_USE_FMTLIB}>:fmt::fmt>
 )
