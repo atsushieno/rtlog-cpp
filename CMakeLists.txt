@@ -69,6 +69,17 @@ if (RTLOG_USE_FMTLIB AND NOT TARGET fmt::fmt)
     FetchContent_MakeAvailable(fmtlib)
 endif()
 
+include(FetchContent)
+FetchContent_Declare(choc
+        GIT_REPOSITORY https://github.com/Tracktion/choc/
+        GIT_TAG 2d5841318adb9276151a8f3ca029752285dd075c
+)
+FetchContent_MakeAvailable(choc)
+target_include_directories(rtlog
+        INTERFACE
+        ${choc_SOURCE_DIR}
+)
+
 target_link_libraries(rtlog 
     INTERFACE 
         readerwriterqueue
