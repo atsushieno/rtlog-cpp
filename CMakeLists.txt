@@ -64,10 +64,25 @@ if (RTLOG_USE_FMTLIB AND NOT TARGET fmt::fmt)
     include(FetchContent)
 
     FetchContent_Declare(fmtlib
-        GIT_REPOSITORY https://github.com/fmtlib/fmt 
+        GIT_REPOSITORY https://github.com/fmtlib/fmt
     )
     FetchContent_MakeAvailable(fmtlib)
 endif()
+
+if (NOT TARGET farbot::farbot)
+    include(FetchContent)
+
+    FetchContent_Declare(farbot
+        GIT_REPOSITORY https://github.com/hogliux/farbot
+        GIT_TAG 0416705394720c12f0d02e55c144e4f69bb06912
+    )
+    #FetchContent_MakeAvailable(farbot) // it fails to build at googletest
+endif()
+
+target_include_directories(rtlog
+        INTERFACE
+        ${farbot_SOURCE_DIR}/include
+)
 
 target_link_libraries(rtlog 
     INTERFACE 

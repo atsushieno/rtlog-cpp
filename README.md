@@ -11,7 +11,7 @@ The design behind this logger was presented at ADCx 2023. Presentation [video](h
 - Ability to log messages of any type and size from the real-time thread
 - Statically allocated memory at compile time, no allocations in the real-time thread
 - Support for printf-style format specifiers (using [a version of the printf family](https://github.com/nothings/stb/blob/master/stb_sprintf.h) that doesn't hit the `localeconv` lock)
-- Efficient thread-safe logging using a [lock free queue](https://github.com/cameron314/readerwriterqueue).
+- Efficient thread-safe logging using a [lock free queue](https://github.com/hogliux/farbot/blob/master/include/farbot/fifo.hpp).
 
 ## Requirements
 

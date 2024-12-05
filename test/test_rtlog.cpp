@@ -7,7 +7,7 @@ namespace rtlog::test
 std::atomic<std::size_t> gSequenceNumber{ 0 };
 
 constexpr auto MAX_LOG_MESSAGE_LENGTH = 256;
-constexpr auto MAX_NUM_LOG_MESSAGES = 100;
+constexpr auto MAX_NUM_LOG_MESSAGES = 128;
 
 enum class ExampleLogLevel
 {
@@ -191,7 +191,7 @@ TEST_CASE("Errors are returned from Log")
 
     SUBCASE("Enqueue more than capacity and get an error")
     {
-        const auto maxNumMessages = 10;
+        const auto maxNumMessages = 16;
         rtlog::Logger<ExampleLogData, maxNumMessages, MAX_LOG_MESSAGE_LENGTH, gSequenceNumber> logger;
 
         auto status = rtlog::Status::Success;

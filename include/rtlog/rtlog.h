@@ -10,7 +10,7 @@
 #include <fmt/format.h>
 #endif // RTLOG_USE_FMTLIB
 
-#include <readerwriterqueue.h>
+#include <farbot/fifo.hpp>
 
 #ifndef STB_SPRINTF_IMPLEMENTATION
 #define STB_SPRINTF_IMPLEMENTATION
@@ -39,8 +39,6 @@ enum class Status
   * This type is user defined, and is often the additional data outside the format string you want to log.
   * For instance: The log level, the log region, the file name, the line number, etc.
   * See examples or tests for some ideas.
-  *
-  * TODO: Currently is built on a single input/single output queue. Do not call Log or PrintAndClearLogQueue from multiple threads.
   *
   * @tparam LogData The type of the data to be logged.
   * @tparam MaxNumMessages The maximum number of messages that can be enqueud at once. If this number is exceeded, the logger will return an error.
@@ -91,7 +89,7 @@ public:
         }
 
         // Even if the message was truncated, we still try to enqueue it to minimize data loss
-        const bool dataWasEnqueued = mQueue.try_enqueue(dataToQueue);
+        const bool dataWasEnqueued = mQueue.push(std::move(dataToQueue));
 
         if (!dataWasEnqueued)
         {
@@ -176,7 +174,7 @@ public:
         }
 
         // Even if the message was truncated, we still try to enqueue it to minimize data loss
-        const bool dataWasEnqueued = mQueue.try_enqueue(dataToQueue);
+        const bool dataWasEnqueued = mQueue.push(dataToQueue);
 
         if (!dataWasEnqueued)
         {
@@ -208,7 +206,7 @@ public:
         int numProcessed = 0;
 
         InternalLogData value;
-        while (mQueue.try_dequeue(value)) 
+        while (mQueue.pop(value))
         {
             printLogFn(value.mLogData, value.mSequenceNumber, "%s", value.mMessage.data());
             numProcessed++;
@@ -225,7 +223,9 @@ private:
         std::array<char, MaxMessageLength> mMessage{};
     };
 
-    moodycamel::ReaderWriterQueue<InternalLogData> mQueue{ MaxNumMessages };
+    farbot::fifo<InternalLogData,
+                 farbot::fifo_options::concurrency::single,
+                 farbot::fifo_options::concurrency::multiple> mQueue{ MaxNumMessages };
 };
 
 

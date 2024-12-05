@@ -5,7 +5,7 @@
 namespace evr
 {
 constexpr auto MAX_LOG_MESSAGE_LENGTH = 256;
-constexpr auto MAX_NUM_LOG_MESSAGES = 100;
+constexpr auto MAX_NUM_LOG_MESSAGES = 128;
 
 enum class LogLevel
 {
